@@ -10,8 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@picovoice/leopard-react": "^2.0.2",
-    "@picovoice/web-voice-processor": "^4.0.9",
+    "mic-recorder-to-mp3": "^2.2.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

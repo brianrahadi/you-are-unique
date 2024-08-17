@@ -1,62 +1,156 @@
-import React from "react";
-import { useLeopard } from "@picovoice/leopard-react";
+import { useState, useEffect } from "react";
+import MicRecorder from "mic-recorder-to-mp3";
 
 export const VoiceWidget = () => {
-  const {
-    result,
-    isLoaded,
-    error,
-    init,
-    processFile,
-    startRecording,
-    stopRecording,
-    isRecording,
-  } = useLeopard();
+  const [state, setState] = useState({
+    isRecording: false,
+    blobURL: "",
+    isBlocked: false,
+  });
 
-  const initEngine = async () => {
-    await init(
-      "GQAsnpiXQz2Ru8lY/3DQy8em9/SBWlDfWlIbJ10oUL0dSo/a8AHADg==",
-      { publicPath: "" },
-      { enableAutomaticPunctuation: true }
+  const [Mp3Recorder, setMp3Recorder] = useState(
+    new MicRecorder({ bitRate: 128 })
+  );
+
+  useEffect(() => {
+    navigator.getUserMedia(
+      { audio: true },
+      () => {
+        console.log("Permission Granted");
+        setState({ isBlocked: false });
+      },
+      () => {
+        console.log("Permission Denied");
+        setState({ isBlocked: true });
+      }
     );
+  }, []);
+
+  const start = () => {
+    if (state.isBlocked) {
+      console.log("Permission Denied");
+    } else {
+      Mp3Recorder.start()
+        .then(() => {
+          setState({ isRecording: true });
+        })
+        .catch((e) => console.error(e));
+    }
   };
 
-  const toggleRecord = async () => {
-    if (isRecording) {
-      await stopRecording();
-    } else {
-      await startRecording();
-    }
+  const stop = () => {
+    Mp3Recorder.stop()
+      .getMp3()
+      .then(([buffer, blob]) => {
+        const blobURL = URL.createObjectURL(blob);
+        setState({ blobURL, isRecording: false });
+      })
+      .catch((e) => console.log(e));
   };
 
   return (
     <div>
-      {error && <p className="error-message">{error.toString()}</p>}
-      <br />
-      <button onClick={initEngine} disabled={isLoaded}>
-        Initialize Leopard
+      <button onClick={start} disabled={state.isRecording}>
+        Record
       </button>
-      <br />
-      <br />
-      <label htmlFor="audio-file">Choose audio file to transcribe:</label>
-      <input
-        id="audio-file"
-        type="file"
-        accept="audio/*"
-        disabled={!isLoaded}
-        onChange={async (e) => {
-          if (!!e.target.files?.length) {
-            await processFile(e.target.files[0]);
-          }
-        }}
-      />
-      <br />
-      <label htmlFor="audio-record">Record audio to transcribe:</label>
-      <button id="audio-record" disabled={!isLoaded} onClick={toggleRecord}>
-        {isRecording ? "Stop Recording" : "Start Recording"}
+      <button onClick={stop} disabled={!state.isRecording}>
+        Stop
       </button>
-      <h3>Transcript:</h3>
-      <p>{result?.transcript}</p>
+      <audio src={state.blobURL} controls="controls" />
     </div>
   );
 };
+
+// import MicRecorder from "mic-recorder-to-mp3";
+// import { useEffect } from "react";
+// import { useState } from "react";
+
+// export const VoiceWidget = () => {
+//   const [isRecording, setIsRecording] = useState(false);
+//   const [canRecord, setCanRecord] = useState(false);
+//   const [MP3Recorder, setMP3Recorder] = useState(
+//     new MicRecorder({ bitRate: 128 })
+//   );
+
+//   useEffect(() => {
+//     navigator.getUserMedia(
+//       { audio: true },
+//       () => {
+//         console.log("Permission Granted");
+//         setCanRecord(true);
+//         // this.setState({ isBlocked: false });
+//       },
+//       () => {
+//         console.log("Permission Denied");
+//         setCanRecord(false);
+//       }
+//     );
+//   });
+
+//   const onClickStartRecording = () => {
+//     MP3Recorder.start()
+//       .then(() => {
+//         console.log("RECORDING");
+//         // button.textContent = "Stop recording";
+//         // button.classList.toggle("btn-danger");
+//         // button.removeEventListener("click", startRecording);
+//         // button.addEventListener("click", stopRecording);
+//       })
+//       .catch((e) => {
+//         console.error(e);
+//       });
+//   };
+
+//   const onClickStopRecording = () => {
+//     MP3Recorder.stop()
+//       .getMp3()
+//       .then(([buffer, blob]) => {
+//         console.log(buffer, blob);
+//         setIsRecording(false);
+//         const file = new File(buffer, "music.mp3", {
+//           type: blob.type,
+//           lastModified: Date.now(),
+//         });
+
+//         // const li = document.createElement("li");
+//         // const player = new Audio(URL.createObjectURL(file));
+//         // player.controls = true;
+//         // li.appendChild(player);
+//         // document.querySelector("#playlist").appendChild(li);
+
+//         // button.textContent = "Start recording";
+//         // button.classList.toggle("btn-danger");
+//         // button.removeEventListener("click", stopRecording);
+//         // button.addEventListener("click", startRecording);
+//       })
+//       .catch((e) => {
+//         console.error(e);
+//       });
+//   };
+
+//   return (
+//     <article>
+//       <button
+//         onClick={isRecording ? onClickStartRecording : onClickStopRecording}
+//         style={{ backgroundColor: isRecording ? "red" : "green" }}
+//       >
+//         {isRecording ? "Stop" : "Start"}
+//       </button>
+//       <p>
+//         {canRecord
+//           ? "You have permission to record"
+//           : "You don't have permission to record"}
+//       </p>
+//     </article>
+//   );
+// };
+
+// // const button = document.querySelector("button");
+
+// // button.addEventListener("click", startRecording);
+
+// // function startRecording() {}
+
+// // function stopRecording() {
+
+// // }

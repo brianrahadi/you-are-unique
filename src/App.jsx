@@ -3,7 +3,7 @@ import { VoiceWidget } from "./components/VoiceWidget";
 function App() {
   return (
     <div className="App">
-      <h1>Leopard React Demo</h1>
+      <h1>Today's Attendees</h1>
       <VoiceWidget />
     </div>
   );
