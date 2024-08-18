@@ -4,6 +4,7 @@ import {
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
+  Description
 } from "@headlessui/react";
 import MicRecorder from "mic-recorder-to-mp3";
 import iconMic from "../assets/icon_mic.svg";
@@ -16,7 +17,7 @@ const RecordingModal = (props) => {
   const { open, stop } = props;
 
   return (
-    <Dialog open={open} onClose={() => {}} className="relative z-10">
+    <Dialog open={open} onClose={() => { }} className="relative z-10">
       <DialogBackdrop
         transition
         className="fixed inset-0 bg-gray-500 bg-opacity-100 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
@@ -32,8 +33,9 @@ const RecordingModal = (props) => {
 };
 
 const Modal = (props) => {
-  const { open, setOpen, namePassed, refreshUsers } = props;
+  const { open, setOpen, namePassed, refreshUsers, users } = props;
   const [name, setName] = useState(namePassed);
+  const [isExistingUser, setIsExistingUser] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const { success, loading, error, createUser } = useCreateUser();
   // const [open, setOpen] = useState(true);
@@ -48,6 +50,14 @@ const Modal = (props) => {
       navigate("/"); // Navigate to home or another page
     }
   };
+
+  useEffect(() => {
+    if (Array.isArray(users) && name !== '') {
+      setIsExistingUser(
+        users.some(user => user.name.trim().toLowerCase() === name.trim().toLowerCase())
+      )
+    }
+  }, [name])
 
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -81,6 +91,11 @@ const Modal = (props) => {
                     className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
                   />
                 </div>
+                <Description
+                  className="text-base font-semibold leading-6 text-gray-500 text-center mt-3">
+                  {name !== '' && (isExistingUser ? `Checking in ${name} as it is an existing user. ` : `Creating ${name} as it is a new user`)}
+                </Description>
+
               </div>
             </div>
             <div className="bg-gray-50 px-4 py-3 grid grid-cols-2 sm:px-6 gap-4">
@@ -108,7 +123,7 @@ const Modal = (props) => {
   );
 };
 
-const RecordButton = ({ allUsersName, refreshUsers }) => {
+const RecordButton = ({ allUsersName, refreshUsers, users }) => {
   const [state, setState] = useState({
     isRecording: false,
     blobURL: "",
@@ -213,6 +228,7 @@ const RecordButton = ({ allUsersName, refreshUsers }) => {
         allUsersName={allUsersName}
         namePassed="name"
         refreshUsers={refreshUsers}
+        users={users}
       ></Modal>
     </>
   );
