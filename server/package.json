@@ -20,6 +20,7 @@
     "@fastify/sensible": "^5.0.0",
     "fastify": "^4.26.1",
     "fastify-cli": "^6.3.0",
-    "fastify-plugin": "^4.0.0"
+    "fastify-plugin": "^4.0.0",
+    "mongoose": "^8.5.3"
   }
 }
