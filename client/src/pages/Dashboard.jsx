@@ -14,7 +14,7 @@ const Dashboard = ({ users, loadingUsers, isAllVisitors, allUsers }) => {
       <div className="text-center mb-4">
         <h2 className=" text-gray-600 text-2xl">{today}</h2>{" "}
         {/* Display today's date */}
-        <h1 className="text-black">
+        <h1 className="text-black text-4xl">
           {isAllVisitors ? "All Visitors" : "Today's Visitors"}
         </h1>
       </div>
