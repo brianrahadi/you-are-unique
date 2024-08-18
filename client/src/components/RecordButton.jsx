@@ -8,11 +8,14 @@ import {
 import MicRecorder from "mic-recorder-to-mp3";
 import iconMic from "../assets/icon_mic.svg";
 import iconAudio from "../assets/icon_audio.svg";
+import { useNavigate } from "react-router-dom";
 
 const Modal = (props) => {
   const { open, setOpen, namePassed } = props;
   const [name, setName] = useState(namePassed);
   // const [open, setOpen] = useState(true);
+
+  const navigate = useNavigate();
 
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -59,7 +62,11 @@ const Modal = (props) => {
               <button
                 type="button"
                 data-autofocus
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  // send the data to DB here?
+                  setOpen(false);
+                  navigate("/");
+                }}
                 className="mt-3 inline-flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-500 sm:mt-0 sm:w-auto"
               >
                 Confirm
@@ -118,7 +125,9 @@ const RecordButton = () => {
         const blobURL = URL.createObjectURL(blob);
         setState({ blobURL, isRecording: false });
         // send the audio to backend here
+        // if it's a new user, open the modal
         setIsModalOpen(true);
+        // if it's an existing user, navigate to dashboard page and show the latest page
       })
       .catch((e) => console.log(e));
   };
