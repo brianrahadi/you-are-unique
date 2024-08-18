@@ -1,6 +1,9 @@
 # Don't include .wav files
 *.wav
 
+# Environment variables
+.env
+
 # Logs
 logs
 *.log

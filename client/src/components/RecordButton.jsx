@@ -10,6 +10,7 @@ import iconMic from "../assets/icon_mic.svg";
 import iconAudio from "../assets/icon_audio.svg";
 import { useNavigate } from "react-router-dom";
 import useCreateUser from "../hooks/create-user";
+import axios from "axios";
 
 const RecordingModal = (props) => {
   const { open, stop } = props;
@@ -76,7 +77,7 @@ const Modal = (props) => {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="block w-full bg-white rounded-md border-0 py-1.5 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 text-center"
+                    className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
                   />
                 </div>
               </div>
@@ -112,6 +113,7 @@ const RecordButton = ({ allUsersName }) => {
     blobURL: "",
     isBlocked: false,
   });
+  const [formData, setFormData] = useState();
 
   const [Mp3Recorder, setMp3Recorder] = useState(
     new MicRecorder({ bitRate: 128 })
@@ -149,24 +151,51 @@ const RecordButton = ({ allUsersName }) => {
     Mp3Recorder.stop()
       .getMp3()
       .then(([buffer, blob]) => {
-        const blobURL = URL.createObjectURL(blob);
+        const blobData = new Blob(buffer, { type: "audio/ogg; codecs=opus" });
+        const blobURL = URL.createObjectURL(blobData);
         setState((prevState) => ({
           ...prevState,
           blobURL,
           isRecording: false,
         }));
+
         // send the audio to backend here
-        // if it's a new user, open the modal
+        const formData = new FormData();
+        formData.append("recording", blobData, "newRecording.wav");
+        setFormData(formData);
+
+        // Backend should respond with extracted name from audio
+        // and other information like time of recording
+        // If it's a new user, open the modal and confirm name and spelling
         setIsModalOpen(true);
-        // if it's an existing user, navigate to dashboard page and show the latest page
+
+        // if it's an existing user, navigate to dashboard page and show the latest person to checkin
       })
       .catch((e) => console.log(e));
   };
 
+  useEffect(() => {
+    const fetchData = async (data) => {
+      console.log(data);
+      try {
+        await axios.post("http://localhost:3000/record", data, {
+          headers: {
+            "Content-type": "multipart/form-data",
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (formData) {
+      fetchData(formData);
+      // const { success } = postData(formData);
+    }
+  }, [formData]);
+
   return (
     <>
-      {/* <audio src={state.blobURL} controls="controls" /> */}
-
       <button
         className={`rounded-full fixed bottom-4 right-4 h-24 w-24 bg-red-600`}
         onClick={start}
