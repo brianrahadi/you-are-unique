@@ -17,14 +17,14 @@ const Modal = (props) => {
   const [submitted, setSubmitted] = useState(false);
   const { success, loading, error, createUser } = useCreateUser();
   // const [open, setOpen] = useState(true);
-  
+
   const navigate = useNavigate();
   const handleSubmitName = async (e) => {
     e.preventDefault();
     await createUser(name);
     if (success) {
       setOpen(false);
-      navigate('/'); // Navigate to home or another page
+      navigate("/"); // Navigate to home or another page
     }
   };
 
@@ -73,18 +73,9 @@ const Modal = (props) => {
               <button
                 type="button"
                 data-autofocus
-<<<<<<< HEAD
-                onClick={() => {
-                  // send the data to DB here?
-                  setOpen(false);
-                  navigate("/");
-                }}
-                className="mt-3 inline-flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-500 sm:mt-0 sm:w-auto"
-=======
-                disabled={name === ''}
+                disabled={name === ""}
                 onClick={handleSubmitName}
                 className="mt-3 inline-flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300  sm:mt-0 sm:w-auto"
->>>>>>> b13e9ac733947cf39e1f34a5bbdfb9b22f09e7b0
               >
                 Confirm
               </button>
