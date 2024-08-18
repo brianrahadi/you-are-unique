@@ -30,8 +30,13 @@ const styles = {
   },
 };
 
-
-const ScrollableComponent = ({ users, loadingUsers, allUsers, isAllVisitors, refreshUsers }) => {
+const ScrollableComponent = ({
+  users,
+  loadingUsers,
+  allUsers,
+  isAllVisitors,
+  refreshUsers,
+}) => {
   const { success, loading, error, checkInUser } = useCheckInUser();
   const navigate = useNavigate();
   const [name, setName] = useState("");
@@ -92,8 +97,7 @@ const ScrollableComponent = ({ users, loadingUsers, allUsers, isAllVisitors, ref
                   <span>{user.lastVisited}</span>
                 </div>
               </div>
-            </div>
-          ))
+            ))
           : Array.isArray(filteredUsers) &&
             filteredUsers.map((user, index) => (
               <div
@@ -114,15 +118,18 @@ const ScrollableComponent = ({ users, loadingUsers, allUsers, isAllVisitors, ref
                   <span>{user.name}</span>
                   {getFormattedShortDate(user.lastVisited) ===
                   todayShortDate ? (
-                  <span>{user.lastVisited}</span>
-                ) : (
-                  <button className="inline-block text-base px-4 bg-green-600 hover:bg-green-500 text-white rounded" onClick={(e) => handleCheckInUser(e, user._id)}>
-                    Check-in
-                  </button>
-                )}
+                    <span>{user.lastVisited}</span>
+                  ) : (
+                    <button
+                      className="inline-block text-base px-4 bg-green-600 hover:bg-green-500 text-white rounded"
+                      onClick={(e) => handleCheckInUser(e, user._id)}
+                    >
+                      Check-in
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
       </div>
     </div>
   );
