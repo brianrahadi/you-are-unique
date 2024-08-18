@@ -81,7 +81,9 @@ const ScrollableComponent = ({ users, loadingUsers, allUsers }) => {
                   todayShortDate ? (
                     <span>{user.lastVisited}</span>
                   ) : (
-                    <button className="inline-block h-full">Check-in</button>
+                    <button className="inline-block text-base px-4 bg-green-600 text-white rounded">
+                      Check-in
+                    </button>
                   )}
                 </div>
               </div>
