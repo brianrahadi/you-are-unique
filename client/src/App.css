@@ -1,42 +1,38 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* App.css */
+body {
+  background-color: #ffffff; /* Set the background color for the whole page */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Spinner styles */
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1); /* Light border */
+  border-left: 4px solid #000; /* Dark border for animation */
+  border-radius: 50%; /* Circular shape */
+  width: 40px; /* Width of the spinner */
+  height: 40px; /* Height of the spinner */
+  animation: spin 1s linear infinite; /* Spin animation */
+  margin: auto; /* Center the spinner */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Keyframes for spinning animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); } /* Start state */
+  100% { transform: rotate(360deg); } /* End state */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Styling for the search box */
+.search-box {
+  display: inline-block;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 12px; /* Rounded corners */
+  width: 250px; /* Width of the text box */
+  text-align: center; /* Center text inside the box */
+  margin: 10px 0; /* Margin above and below the box */
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+/* Additional styling for the app (optional) */
+.App {
+  font-family: Arial, sans-serif; /* Font style for the app */
+  text-align: center; /* Center text */
 }
