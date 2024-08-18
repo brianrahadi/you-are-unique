@@ -8,55 +8,7 @@ import RecordButton from "./components/RecordButton";
 import Router from "./Router";
 import "./App.css"; // Import the CSS file with the spinner styles
 
-const styles = {
-  container: {
-    width: "300px",
-    height: "400px",
-    border: "1px solid #ccc",
-    padding: "10px",
-    boxSizing: "border-box",
-  },
-  scrollContainer: {
-    height: "100%",
-    overflowY: "auto",
-    paddingRight: "10px",
-  },
-  item: {
-    padding: "10px",
-    borderBottom: "1px solid #ddd",
-  },
-  row: {
-    display: "flex",
-    justifyContent: "space-between",
-    color: "black",
-  },
-};
-
-const ScrollableComponent = () => {
-  const content = Array.from({ length: 20 }, (_, i) => ({
-    name: `Name ${i + 1}`,
-    time: new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    }),
-  }));
-
-  return (
-    <div style={styles.container}>
-      <div style={styles.scrollContainer}>
-        {content.map((item, index) => (
-          <div key={index} style={styles.item}>
-            <div style={styles.row}>
-              <span>{item.name}</span>
-              <span>{item.time}</span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+import ScrollableComponent from "./components/ScrollableComponent";
 
 function App() {
   const { data, loading } = useFetchData();
@@ -73,9 +25,9 @@ function App() {
     <BrowserRouter>
       <Router></Router>
 
-      <div className="App text-xl flex flex-col items-center mx-auto">
+      {/* <div className="App text-xl flex flex-col items-center mx-auto">
         <div className="text-center">
-          <h2 className=" text-black">{today}</h2> {/* Display today's date */}
+          <h2 className=" text-black">{today}</h2> Display today's date
           <h1 className="text-black">Today's Visitors</h1>
           <div className="search-box">Search all visitors</div>
           {loading ? (
@@ -92,11 +44,11 @@ function App() {
         </div>
         <ScrollableComponent />
 
-        {/* <div className="mt-4">
+        <div className="mt-4">
           <VoiceWidget />
           <p>Post Data: {success ? 1 : 0}</p>
-        </div> */}
-      </div>
+        </div>
+      </div> */}
 
       <BottomNav></BottomNav>
       <RecordButton></RecordButton>
