@@ -52,8 +52,10 @@ const RecordButton = () => {
 
   return (
     <>
+      <audio src={state.blobURL} controls="controls" />
+
       <button
-        className={`rounded-full fixed bottom-4 right-4 ${
+        className={`rounded-full fixed bottom-4 right-4 h-24 w-24 ${
           state.isRecording
             ? "bg-green-600 outline-8 outline-green-300 outline"
             : "bg-red-600"

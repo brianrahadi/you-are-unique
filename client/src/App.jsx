@@ -18,7 +18,7 @@ function App() {
         <div className="">
           <h1>Today's Attendees</h1>
           {!loading && JSON.stringify(data)}
-          <VoiceWidget />
+          {/* <VoiceWidget /> */}
           <p>Post Data: {success ? 1 : 0}</p>
         </div>
       </div>
