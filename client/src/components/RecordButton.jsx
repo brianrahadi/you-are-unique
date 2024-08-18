@@ -11,20 +11,39 @@ import iconAudio from "../assets/icon_audio.svg";
 import { useNavigate } from "react-router-dom";
 import useCreateUser from "../hooks/create-user";
 
+const RecordingModal = (props) => {
+  const { open, stop } = props;
+
+  return (
+    <Dialog open={open} onClose={() => {}} className="relative z-10">
+      <DialogBackdrop
+        transition
+        className="fixed inset-0 bg-gray-500 bg-opacity-100 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
+      />
+      <button
+        className={`rounded-full h-24 w-24 bg-green-600 outline-8 outline-green-300 outline fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}
+        onClick={stop}
+      >
+        <img src={iconAudio} alt="record"></img>
+      </button>
+    </Dialog>
+  );
+};
+
 const Modal = (props) => {
   const { open, setOpen, namePassed, allUsersName } = props;
   const [name, setName] = useState(namePassed);
   const [submitted, setSubmitted] = useState(false);
   const { success, loading, error, createUser } = useCreateUser();
   // const [open, setOpen] = useState(true);
-  
+
   const navigate = useNavigate();
   const handleSubmitName = async (e) => {
     e.preventDefault();
     await createUser(name);
     if (success) {
       setOpen(false);
-      navigate('/'); // Navigate to home or another page
+      navigate("/"); // Navigate to home or another page
     }
   };
 
@@ -36,17 +55,17 @@ const Modal = (props) => {
       />
 
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
           <DialogPanel
             transition
             className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-lg data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
           >
             <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-              <div className="sm:flex sm:items-start">
+              <div className="sm:items-start">
                 <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                   <DialogTitle
                     as="h3"
-                    className="text-base font-semibold leading-6 text-gray-900"
+                    className="text-base font-semibold leading-6 text-gray-900 text-center"
                   >
                     Is this name correct?
                   </DialogTitle>
@@ -57,7 +76,7 @@ const Modal = (props) => {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="block w-full bg-white rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full bg-white rounded-md border-0 py-1.5 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 text-center"
                   />
                 </div>
               </div>
@@ -73,9 +92,9 @@ const Modal = (props) => {
               <button
                 type="button"
                 data-autofocus
-                disabled={name === ''}
+                disabled={name === ""}
                 onClick={handleSubmitName}
-                className="mt-3 inline-flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300  sm:mt-0 sm:w-auto"
+                className="mt-3 inline-flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300  sm:mt-0 sm:w-auto"
               >
                 Confirm
               </button>
@@ -105,11 +124,11 @@ const RecordButton = ({ allUsersName }) => {
       { audio: true },
       () => {
         console.log("Permission Granted");
-        setState({ isBlocked: false });
+        setState((prevState) => ({ ...prevState, isBlocked: false }));
       },
       () => {
         console.log("Permission Denied");
-        setState({ isBlocked: true });
+        setState((prevState) => ({ ...prevState, isBlocked: true }));
       }
     );
   }, []);
@@ -120,7 +139,7 @@ const RecordButton = ({ allUsersName }) => {
     } else {
       Mp3Recorder.start()
         .then(() => {
-          setState({ isRecording: true });
+          setState((prevState) => ({ ...prevState, isRecording: true }));
         })
         .catch((e) => console.error(e));
     }
@@ -131,7 +150,11 @@ const RecordButton = ({ allUsersName }) => {
       .getMp3()
       .then(([buffer, blob]) => {
         const blobURL = URL.createObjectURL(blob);
-        setState({ blobURL, isRecording: false });
+        setState((prevState) => ({
+          ...prevState,
+          blobURL,
+          isRecording: false,
+        }));
         // send the audio to backend here
         // if it's a new user, open the modal
         setIsModalOpen(true);
@@ -145,15 +168,13 @@ const RecordButton = ({ allUsersName }) => {
       {/* <audio src={state.blobURL} controls="controls" /> */}
 
       <button
-        className={`rounded-full fixed bottom-4 right-4 h-24 w-24 ${
-          state.isRecording
-            ? "bg-green-600 outline-8 outline-green-300 outline"
-            : "bg-red-600"
-        }`}
-        onClick={state.isRecording ? stop : start}
+        className={`rounded-full fixed bottom-4 right-4 h-24 w-24 bg-red-600`}
+        onClick={start}
       >
-        <img src={state.isRecording ? iconAudio : iconMic} alt="record"></img>
+        <img src={iconMic} alt="record"></img>
       </button>
+
+      <RecordingModal open={state.isRecording} stop={stop} />
 
       {/* {isModalOpen && <Modal></Modal>} */}
       <Modal

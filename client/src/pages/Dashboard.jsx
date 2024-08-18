@@ -10,14 +10,16 @@ const Dashboard = ({ users, loadingUsers, isAllVisitors }) => {
   });
 
   return (
-    <div className="App text-xl flex flex-col items-center mx-auto">
-      <div className="text-center">
-        <h2 className=" text-black">{today}</h2> {/* Display today's date */}
-        <h1 className="text-black">{isAllVisitors ? 'All Visitors' : 'Today\'s Visitors'}</h1>
-        <div className="search-box">Search all visitors</div>
+    <div className="App text-xl flex flex-col items-center mx-auto pt-4">
+      <div className="text-center mb-4">
+        <h2 className=" text-gray-600 text-2xl">{today}</h2>{" "}
+        {/* Display today's date */}
+        <h1 className="text-black">
+          {isAllVisitors ? "All Visitors" : "Today's Visitors"}
+        </h1>
       </div>
 
-      <ScrollableComponent users={users} loadingUsers={loadingUsers}/>
+      <ScrollableComponent users={users} loadingUsers={loadingUsers} />
     </div>
   );
 };
