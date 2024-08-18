@@ -44,10 +44,10 @@ function App() {
         </div>
         <ScrollableComponent /> */}
 
-      <div className="mt-4">
+      {/* <div className="mt-4">
         <VoiceWidget />
         <p>Post Data: {success ? 1 : 0}</p>
-      </div>
+      </div> */}
       {/* </div> */}
 
       <BottomNav></BottomNav>
