@@ -14,6 +14,9 @@ const Router = ({ users, loadingUsers }) => {
           return {
             ...u,
             lastVisited: getFormattedTime(u.lastVisited),
+            lastVisitedDetail: `${getFormattedShortDate(
+              u.lastVisited
+            )} at ${getFormattedTime(u.lastVisited)}`,
           };
         })
     : [];
@@ -23,6 +26,9 @@ const Router = ({ users, loadingUsers }) => {
         return {
           ...u,
           lastVisited: getFormattedShortDate(u.lastVisited),
+          lastVisitedDetail: `${getFormattedShortDate(
+            u.lastVisited
+          )} at ${getFormattedTime(u.lastVisited)}`,
         };
       })
     : [];

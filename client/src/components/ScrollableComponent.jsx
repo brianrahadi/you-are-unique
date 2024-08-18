@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 const styles = {
   container: {
-    width: "300px",
+    maxWidth: "350px",
+    // width: "300px",
     height: "400px",
     padding: "10px",
     boxSizing: "border-box",
@@ -19,7 +20,7 @@ const styles = {
   item: {
     padding: "10px",
     borderBottom: "1px solid #ddd",
-    // cursor: "pointer",
+    cursor: "pointer",
   },
   row: {
     display: "flex",
@@ -64,7 +65,20 @@ const ScrollableComponent = ({
         {name === ""
           ? Array.isArray(users) &&
             users.map((user, index) => (
-              <div key={index} style={styles.item}>
+              <div
+                key={index}
+                style={styles.item}
+                onClick={() =>
+                  navigate("/profile", {
+                    state: {
+                      name: user.name,
+                      lastVisited: user.lastVisitedDetail,
+                      timesVisited: user.timesVisited,
+                      // notes: user.notes,
+                    },
+                  })
+                }
+              >
                 <div style={styles.row}>
                   <span>{user.name}</span>
                   <span>{user.lastVisited}</span>
@@ -76,15 +90,16 @@ const ScrollableComponent = ({
               <div
                 key={index}
                 style={styles.item}
-                // onClick={() =>
-                //   navigate("/profile", {
-                //     state: {
-                //       name: user.name,
-                //       lastVisited: user.lastVisited,
-                //       notes: user.notes,
-                //     },
-                //   })
-                // }
+                onClick={() =>
+                  navigate("/profile", {
+                    state: {
+                      name: user.name,
+                      lastVisited: user.lastVisitedDetail,
+                      timesVisited: user.timesVisited,
+                      // notes: user.notes,
+                    },
+                  })
+                }
               >
                 <div style={styles.row}>
                   <span>{user.name}</span>
