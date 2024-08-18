@@ -23,6 +23,7 @@ const Dashboard = ({ users, loadingUsers, isAllVisitors, allUsers }) => {
         users={users}
         loadingUsers={loadingUsers}
         allUsers={allUsers}
+        isAllVisitors={isAllVisitors}
       />
     </div>
   );

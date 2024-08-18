@@ -205,7 +205,6 @@ const RecordButton = ({ allUsersName }) => {
 
       <RecordingModal open={state.isRecording} stop={stop} />
 
-      {/* {isModalOpen && <Modal></Modal>} */}
       <Modal
         open={isModalOpen}
         setOpen={setIsModalOpen}

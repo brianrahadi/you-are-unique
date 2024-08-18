@@ -28,7 +28,12 @@ const styles = {
   },
 };
 
-const ScrollableComponent = ({ users, loadingUsers, allUsers }) => {
+const ScrollableComponent = ({
+  users,
+  loadingUsers,
+  allUsers,
+  isAllVisitors,
+}) => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const todayShortDate = getFormattedShortDate(new Date());
@@ -50,6 +55,12 @@ const ScrollableComponent = ({ users, loadingUsers, allUsers }) => {
       />
 
       <div style={styles.scrollContainer}>
+        {isAllVisitors && (
+          <div style={styles.row}>
+            <span className="text-gray-600 text-base">Name</span>
+            <span className="text-gray-600 text-base">Last visited</span>
+          </div>
+        )}
         {name === ""
           ? Array.isArray(users) &&
             users.map((user, index) => (
