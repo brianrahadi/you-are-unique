@@ -23,7 +23,7 @@ const RecordingModal = (props) => {
         className="fixed inset-0 bg-gray-500 bg-opacity-100 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
       />
       <button
-        className={`rounded-full h-24 w-24 bg-green-600 outline-8 outline-green-300 outline fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}
+        className={`rounded-full h-24 w-24 bg-green-600 outline-8 outline-green-300 outline fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex justify-center items-center`}
         onClick={stop}
       >
         <img src={iconAudio} alt="record"></img>
@@ -217,7 +217,7 @@ const RecordButton = ({ allUsersName, refreshUsers, users }) => {
   return (
     <>
       <button
-        className={`rounded-full fixed bottom-4 right-4 h-24 w-24 bg-red-600`}
+        className={`rounded-full fixed bottom-4 right-4 h-24 w-24 bg-red-600 flex justify-center items-center`}
         onClick={start}
       >
         <img src={iconMic} alt="record"></img>
