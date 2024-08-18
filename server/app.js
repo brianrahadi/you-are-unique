@@ -1,9 +1,9 @@
 "use strict";
 
-const path = require('node:path')
-const AutoLoad = require('@fastify/autoload')
+const path = require("node:path");
+const AutoLoad = require("@fastify/autoload");
 const mongoose = require("mongoose");
-require('dotenv').config()
+require("dotenv").config();
 
 mongoose
   .connect(process.env.MONGO_URI, {

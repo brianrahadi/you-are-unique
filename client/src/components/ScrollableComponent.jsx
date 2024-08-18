@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { getFormattedShortDate, getFormattedTime } from "../utils/date";
+import { getFormattedShortDate } from "../utils/date";
 import "../App.css"; // Import the CSS file with the spinner styles
 import { useNavigate } from "react-router-dom";
+import useCheckInUser from "../hooks/check-in-user";
 
 const styles = {
   container: {
@@ -29,12 +30,9 @@ const styles = {
   },
 };
 
-const ScrollableComponent = ({
-  users,
-  loadingUsers,
-  allUsers,
-  isAllVisitors,
-}) => {
+
+const ScrollableComponent = ({ users, loadingUsers, allUsers, isAllVisitors, refreshUsers }) => {
+  const { success, loading, error, checkInUser } = useCheckInUser();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const todayShortDate = getFormattedShortDate(new Date());
@@ -42,6 +40,17 @@ const ScrollableComponent = ({
   const filteredUsers = allUsers.filter((user) =>
     user.name.toLowerCase().includes(name.toLowerCase())
   );
+
+  const handleCheckInUser = async (e, id) => {
+    e.preventDefault();
+    await checkInUser(id);
+    if (success) {
+      setName("");
+      refreshUsers();
+      setOpen(false);
+      navigate("/"); // Navigate to home or another page
+    }
+  };
 
   return (
     <div style={styles.container} className="mb-40">
@@ -84,7 +93,8 @@ const ScrollableComponent = ({
                   <span>{user.lastVisited}</span>
                 </div>
               </div>
-            ))
+            </div>
+          ))
           : Array.isArray(filteredUsers) &&
             filteredUsers.map((user, index) => (
               <div
@@ -105,15 +115,15 @@ const ScrollableComponent = ({
                   <span>{user.name}</span>
                   {getFormattedShortDate(user.lastVisited) ===
                   todayShortDate ? (
-                    <span>{user.lastVisited}</span>
-                  ) : (
-                    <button className="inline-block text-base px-4 bg-green-600 hover:bg-green-500 text-white rounded">
-                      Check-in
-                    </button>
-                  )}
-                </div>
+                  <span>{user.lastVisited}</span>
+                ) : (
+                  <button className="inline-block text-base px-4 bg-green-600 hover:bg-green-500 text-white rounded" onClick={(e) => handleCheckInUser(e, user._id)}>
+                    Check-in
+                  </button>
+                )}
               </div>
-            ))}
+            </div>
+          ))}
       </div>
     </div>
   );

@@ -30,13 +30,13 @@ const styles = {
 };
 
 function App() {
-  const { users, loadingUsers } = getAllUsers();
+  const { users, loadingUsers, refreshUsers } = getAllUsers();
 
   return (
     <BrowserRouter>
-      <Router users={users} loadingUsers={loadingUsers}></Router>
-      <BottomNav></BottomNav>
-      <RecordButton></RecordButton>
+      <Router users={users} loadingUsers={loadingUsers} refreshUsers={refreshUsers}/>
+      <BottomNav />
+      <RecordButton users={users} refreshUsers={refreshUsers} />
     </BrowserRouter>
   );
 }

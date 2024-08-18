@@ -4,6 +4,7 @@ import {
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
+  Description,
 } from "@headlessui/react";
 import MicRecorder from "mic-recorder-to-mp3";
 import iconMic from "../assets/icon_mic.svg";
@@ -32,8 +33,9 @@ const RecordingModal = (props) => {
 };
 
 const Modal = (props) => {
-  const { open, setOpen, namePassed, allUsersName } = props;
-  const [name, setName] = useState(namePassed);
+  const { open, setOpen, namePassed, refreshUsers, users } = props;
+  const [name, setName] = useState(() => namePassed);
+  const [isExistingUser, setIsExistingUser] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const { success, loading, error, createUser } = useCreateUser();
   // const [open, setOpen] = useState(true);
@@ -43,10 +45,25 @@ const Modal = (props) => {
     e.preventDefault();
     await createUser(name);
     if (success) {
+      refreshUsers();
       setOpen(false);
       navigate("/"); // Navigate to home or another page
     }
   };
+
+  useEffect(() => {
+    if (Array.isArray(users) && name !== "") {
+      setIsExistingUser(
+        users.some(
+          (user) => user.name.trim().toLowerCase() === name.trim().toLowerCase()
+        )
+      );
+    }
+  }, [name]);
+
+  useEffect(() => {
+    setName(namePassed);
+  }, [namePassed]);
 
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -80,6 +97,12 @@ const Modal = (props) => {
                     className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
                   />
                 </div>
+                <Description className="text-base font-semibold leading-6 text-gray-500 text-center mt-3">
+                  {name !== "" &&
+                    (isExistingUser
+                      ? `Checking in ${name} as it is an existing user. `
+                      : `Creating ${name} as it is a new user`)}
+                </Description>
               </div>
             </div>
             <div className="bg-gray-50 px-4 py-3 grid grid-cols-2 sm:px-6 gap-4">
@@ -107,13 +130,14 @@ const Modal = (props) => {
   );
 };
 
-const RecordButton = ({ allUsersName }) => {
+const RecordButton = ({ allUsersName, refreshUsers, users }) => {
   const [state, setState] = useState({
     isRecording: false,
     blobURL: "",
     isBlocked: false,
   });
   const [formData, setFormData] = useState();
+  const [extractedName, setExtractedName] = useState("");
 
   const [Mp3Recorder, setMp3Recorder] = useState(
     new MicRecorder({ bitRate: 128 })
@@ -163,26 +187,23 @@ const RecordButton = ({ allUsersName }) => {
         const formData = new FormData();
         formData.append("recording", blobData, "newRecording.wav");
         setFormData(formData);
-
-        // Backend should respond with extracted name from audio
-        // and other information like time of recording
-        // If it's a new user, open the modal and confirm name and spelling
-        setIsModalOpen(true);
-
-        // if it's an existing user, navigate to dashboard page and show the latest person to checkin
       })
       .catch((e) => console.log(e));
   };
 
   useEffect(() => {
     const fetchData = async (data) => {
-      console.log(data);
       try {
-        await axios.post("http://localhost:3000/record", data, {
+        const res = await axios.post("http://localhost:3000/record", data, {
           headers: {
             "Content-type": "multipart/form-data",
           },
         });
+
+        if (res.data) {
+          setExtractedName(res.data.extractedName);
+          setIsModalOpen(true);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -190,7 +211,6 @@ const RecordButton = ({ allUsersName }) => {
 
     if (formData) {
       fetchData(formData);
-      // const { success } = postData(formData);
     }
   }, [formData]);
 
@@ -209,7 +229,9 @@ const RecordButton = ({ allUsersName }) => {
         open={isModalOpen}
         setOpen={setIsModalOpen}
         allUsersName={allUsersName}
-        namePassed="name"
+        namePassed={extractedName}
+        refreshUsers={refreshUsers}
+        users={users}
       ></Modal>
     </>
   );

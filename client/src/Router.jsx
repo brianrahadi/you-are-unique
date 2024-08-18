@@ -4,7 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import { getFormattedShortDate, getFormattedTime } from "./utils/date";
 
-const Router = ({ users, loadingUsers }) => {
+const Router = ({ users, loadingUsers, refreshUsers }) => {
   const todayShortDate = getFormattedShortDate(new Date());
 
   const todayVisitors = Array.isArray(users)
@@ -42,6 +42,7 @@ const Router = ({ users, loadingUsers }) => {
             users={todayVisitors}
             loadingUsers={loadingUsers}
             allUsers={allVisitors}
+            refreshUsers={refreshUsers}
           ></Dashboard>
         }
       ></Route>
@@ -53,6 +54,7 @@ const Router = ({ users, loadingUsers }) => {
             loadingUsers={loadingUsers}
             isAllVisitors
             allUsers={allVisitors}
+            refreshUsers={refreshUsers}
           ></Dashboard>
         }
       ></Route>
