@@ -23,17 +23,25 @@ async function createUser(request, reply) {
     const { name, lastVisited, timesVisited } = request.body;
     const existingUser = await User.find({ name: name });
     if (existingUser.length === 1) {
-      reply.send(`Failed! User with name ${request.body.name} already exists`);
-      return;
+      const updatedExisitingUser = await User.findOneAndUpdate(
+        { name: name },
+        {
+          $inc: { timesVisited: 1 }, // Increment the timesVisited property by 1
+          $set: { lastVisited: new Date() }, // Update lastVisited to the current date
+        },
+        { new: true }
+      );
+      reply.status(200).send(updatedExisitingUser);
+    } else {
+      const userObj = {
+        name,
+        lastVisited: lastVisited ?? new Date(),
+        timesVisited: timesVisited ?? 1,
+      };
+      const user = new User(userObj);
+      const result = await user.save();
+      reply.send(result);
     }
-    const userObj = {
-      name,
-      lastVisited: lastVisited ?? new Date(),
-      timesVisited: timesVisited ?? 1
-    }
-    const user = new User(userObj);
-    const result = await user.save();
-    reply.send(result);
   } catch (error) {
     reply.status(500).send(error);
   }
@@ -57,12 +65,12 @@ async function deleteUser(request, reply) {
   }
 }
 async function checkInUser(request, reply) {
-  try {    
+  try {
     const user = await User.findByIdAndUpdate(
       request.params.id,
       {
         $inc: { timesVisited: 1 }, // Increment the timesVisited property by 1
-        $set: { lastVisited: new Date() } // Update lastVisited to the current date
+        $set: { lastVisited: new Date() }, // Update lastVisited to the current date
       },
       { new: true }
     );
@@ -78,5 +86,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  checkInUser
+  checkInUser,
 };

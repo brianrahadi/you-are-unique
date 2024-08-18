@@ -56,10 +56,14 @@ module.exports = async function (fastify, opts) {
           console.log("File renamed successfully");
         }
       });
-    } catch (error) {
-      console.error("Error extracting name from audio: ", error);
-    }
 
-    return { status: 200 };
+      // Send the extracted name to the frontend for checking
+      reply.status(200).send({ extractedName });
+    } catch (error) {
+      console.error(
+        "Error extracting name from audio and adding to database: ",
+        error
+      );
+    }
   });
 };

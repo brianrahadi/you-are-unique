@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import axios from 'axios';
+import { useState, useCallback } from "react";
+import axios from "axios";
 
 // Custom Hook
 const useCreateUser = () => {
@@ -13,11 +13,15 @@ const useCreateUser = () => {
     setSuccess(null);
 
     try {
-      await axios.post('http://localhost:3000/user', { name });
+      await axios.post(
+        "http://localhost:3000/user",
+        { name },
+        { "Access-Control-Allow-Origin": "*" }
+      );
       setSuccess(true);
     } catch (err) {
       console.error(err);
-      setError('Error creating user. Please try again.');
+      setError("Error creating user. Please try again.");
       setSuccess(false);
     } finally {
       setLoading(false);
