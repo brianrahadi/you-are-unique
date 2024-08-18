@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getFormattedShortDate, getFormattedTime } from "../utils/date";
 import "../App.css"; // Import the CSS file with the spinner styles
 import { useNavigate } from "react-router-dom";
 
@@ -27,11 +28,12 @@ const styles = {
   },
 };
 
-const ScrollableComponent = ({ users, loadingUsers }) => {
+const ScrollableComponent = ({ users, loadingUsers, allUsers }) => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
+  const todayShortDate = getFormattedShortDate(new Date());
 
-  const filteredUsers = users.filter((user) =>
+  const filteredUsers = allUsers.filter((user) =>
     user.name.toLowerCase().includes(name.toLowerCase())
   );
 
@@ -48,27 +50,42 @@ const ScrollableComponent = ({ users, loadingUsers }) => {
       />
 
       <div style={styles.scrollContainer}>
-        {Array.isArray(filteredUsers) &&
-          filteredUsers.map((user, index) => (
-            <div
-              key={index}
-              style={styles.item}
-              // onClick={() =>
-              //   navigate("/profile", {
-              //     state: {
-              //       name: user.name,
-              //       lastVisited: user.lastVisited,
-              //       notes: user.notes,
-              //     },
-              //   })
-              // }
-            >
-              <div style={styles.row}>
-                <span>{user.name}</span>
-                <span>{user.lastVisited}</span>
+        {name === ""
+          ? Array.isArray(users) &&
+            users.map((user, index) => (
+              <div key={index} style={styles.item}>
+                <div style={styles.row}>
+                  <span>{user.name}</span>
+                  <span>{user.lastVisited}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          : Array.isArray(filteredUsers) &&
+            filteredUsers.map((user, index) => (
+              <div
+                key={index}
+                style={styles.item}
+                // onClick={() =>
+                //   navigate("/profile", {
+                //     state: {
+                //       name: user.name,
+                //       lastVisited: user.lastVisited,
+                //       notes: user.notes,
+                //     },
+                //   })
+                // }
+              >
+                <div style={styles.row}>
+                  <span>{user.name}</span>
+                  {getFormattedShortDate(user.lastVisited) ===
+                  todayShortDate ? (
+                    <span>{user.lastVisited}</span>
+                  ) : (
+                    <button className="inline-block h-full">Check-in</button>
+                  )}
+                </div>
+              </div>
+            ))}
       </div>
     </div>
   );
