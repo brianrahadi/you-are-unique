@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { getFormattedShortDate } from "../utils/date";
 import "../App.css"; // Import the CSS file with the spinner styles
 import { useNavigate } from "react-router-dom";
+import useCheckInUser from "../hooks/check-in-user";
 
 const styles = {
   container: {
@@ -28,7 +29,8 @@ const styles = {
   },
 };
 
-const ScrollableComponent = ({ users, loadingUsers, allUsers }) => {
+const ScrollableComponent = ({ users, loadingUsers, allUsers, refreshUsers }) => {
+  const { success, loading, error, checkInUser } = useCheckInUser();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const todayShortDate = getFormattedShortDate(new Date());
@@ -36,6 +38,17 @@ const ScrollableComponent = ({ users, loadingUsers, allUsers }) => {
   const filteredUsers = allUsers.filter((user) =>
     user.name.toLowerCase().includes(name.toLowerCase())
   );
+
+  const handleCheckInUser = async (e, id) => {
+    e.preventDefault();
+    await checkInUser(id);
+    if (success) {
+      setName("");
+      refreshUsers();
+      setOpen(false);
+      navigate("/"); // Navigate to home or another page
+    }
+  };
 
   return (
     <div style={styles.container} className="mb-40">
@@ -52,42 +65,42 @@ const ScrollableComponent = ({ users, loadingUsers, allUsers }) => {
       <div style={styles.scrollContainer}>
         {name === ""
           ? Array.isArray(users) &&
-            users.map((user, index) => (
-              <div key={index} style={styles.item}>
-                <div style={styles.row}>
-                  <span>{user.name}</span>
-                  <span>{user.lastVisited}</span>
-                </div>
+          users.map((user, index) => (
+            <div key={index} style={styles.item}>
+              <div style={styles.row}>
+                <span>{user.name}</span>
+                <span>{user.lastVisited}</span>
               </div>
-            ))
+            </div>
+          ))
           : Array.isArray(filteredUsers) &&
-            filteredUsers.map((user, index) => (
-              <div
-                key={index}
-                style={styles.item}
-                // onClick={() =>
-                //   navigate("/profile", {
-                //     state: {
-                //       name: user.name,
-                //       lastVisited: user.lastVisited,
-                //       notes: user.notes,
-                //     },
-                //   })
-                // }
-              >
-                <div style={styles.row}>
-                  <span>{user.name}</span>
-                  {getFormattedShortDate(user.lastVisited) ===
+          filteredUsers.map((user, index) => (
+            <div
+              key={index}
+              style={styles.item}
+            // onClick={() =>
+            //   navigate("/profile", {
+            //     state: {
+            //       name: user.name,
+            //       lastVisited: user.lastVisited,
+            //       notes: user.notes,
+            //     },
+            //   })
+            // }
+            >
+              <div style={styles.row}>
+                <span>{user.name}</span>
+                {getFormattedShortDate(user.lastVisited) ===
                   todayShortDate ? (
-                    <span>{user.lastVisited}</span>
-                  ) : (
-                    <button className="inline-block text-base px-4 bg-green-600 hover:bg-green-500 text-white rounded">
-                      Check-in
-                    </button>
-                  )}
-                </div>
+                  <span>{user.lastVisited}</span>
+                ) : (
+                  <button className="inline-block text-base px-4 bg-green-600 hover:bg-green-500 text-white rounded" onClick={(e) => handleCheckInUser(e, user._id)}>
+                    Check-in
+                  </button>
+                )}
               </div>
-            ))}
+            </div>
+          ))}
       </div>
     </div>
   );

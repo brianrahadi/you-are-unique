@@ -34,7 +34,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Router users={users} loadingUsers={loadingUsers} />
+      <Router users={users} loadingUsers={loadingUsers} refreshUsers={refreshUsers}/>
       <BottomNav />
       <RecordButton refreshUsers={refreshUsers} />
     </BrowserRouter>
