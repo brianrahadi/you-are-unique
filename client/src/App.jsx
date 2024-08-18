@@ -23,10 +23,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="mx-auto max-w-lg">
-        <Router></Router>
+      <Router></Router>
 
-        {/* <div className="App text-xl flex flex-col items-center mx-auto">
+      {/* <div className="App text-xl flex flex-col items-center mx-auto">
         <div className="text-center">
           <h2 className=" text-black">{today}</h2> Display today's date
           <h1 className="text-black">Today's Visitors</h1>
@@ -51,9 +50,8 @@ function App() {
         </div>
       </div> */}
 
-        <BottomNav></BottomNav>
-        <RecordButton></RecordButton>
-      </div>
+      <BottomNav></BottomNav>
+      <RecordButton></RecordButton>
     </BrowserRouter>
   );
 }

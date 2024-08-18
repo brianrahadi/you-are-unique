@@ -1,5 +1,6 @@
 import React from "react";
 import "../App.css"; // Import the CSS file with the spinner styles
+import { useNavigate } from "react-router-dom";
 
 const styles = {
   container: {
@@ -26,6 +27,8 @@ const styles = {
 };
 
 const ScrollableComponent = () => {
+  const navigate = useNavigate();
+
   const content = Array.from({ length: 20 }, (_, i) => ({
     name: `Name ${i + 1}`,
     time: new Date().toLocaleTimeString([], {
@@ -39,7 +42,19 @@ const ScrollableComponent = () => {
     <div style={styles.container} className="mb-40">
       <div style={styles.scrollContainer}>
         {content.map((item, index) => (
-          <div key={index} style={styles.item}>
+          <div
+            key={index}
+            style={styles.item}
+            onClick={() =>
+              navigate("/profile", {
+                state: {
+                  name: item.name,
+                  lastVisited: item.time,
+                  notes: item.notes,
+                },
+              })
+            }
+          >
             <div style={styles.row}>
               <span>{item.name}</span>
               <span>{item.time}</span>
