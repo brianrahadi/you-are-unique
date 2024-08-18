@@ -52,7 +52,7 @@ const RecordButton = () => {
 
   return (
     <>
-      <audio src={state.blobURL} controls="controls" />
+      {/* <audio src={state.blobURL} controls="controls" /> */}
 
       <button
         className={`rounded-full fixed bottom-4 right-4 h-24 w-24 ${
