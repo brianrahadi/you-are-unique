@@ -12,7 +12,7 @@ const Dashboard = ({ users, loadingUsers, isAllVisitors, allUsers, refreshUsers 
   return (
     <div className="App text-xl flex flex-col items-center mx-auto pt-4">
       <div className="text-center mb-4">
-        <h2 className=" text-gray-600 text-2xl">{today}</h2>{" "}
+        {!isAllVisitors && <h2 className=" text-gray-600 text-2xl">{today}</h2>}
         {/* Display today's date */}
         <h1 className="text-black text-4xl font-semibold">
           {isAllVisitors ? "All Visitors" : "Today's Visitors"}
