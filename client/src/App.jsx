@@ -1,8 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { VoiceWidget } from "./components/VoiceWidget";
-import useFetchData from "./hooks/use-fetch-data";
-import postData from "./hooks/post-data";
 import "./App.css"; // Import the CSS file with the spinner styles
 import getAllUsers from "./hooks/get-all-users";
 
@@ -30,24 +28,21 @@ const styles = {
   },
 };
 
-const ScrollableComponent = () => {
-  const content = Array.from({ length: 20 }, (_, i) => ({
-    name: `Name ${i + 1}`,
-    time: new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    }),
-  }));
+const ScrollableComponent = ({ users }) => {
+  const getFormattedDate = (dateStr) => new Date(dateStr).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  })
 
   return (
     <div style={styles.container}>
       <div style={styles.scrollContainer}>
-        {content.map((item, index) => (
+        {Array.isArray(users) && users.map((user, index) => (
           <div key={index} style={styles.item}>
             <div style={styles.row}>
-              <span>{item.name}</span>
-              <span>{item.time}</span>
+              <span>{user.name}</span>
+              <span>{getFormattedDate(user.lastVisited)}</span>
             </div>
           </div>
         ))}
@@ -57,9 +52,6 @@ const ScrollableComponent = () => {
 };
 
 function App() {
-  const { data, loading } = useFetchData();
-  const { success } = postData("wow123");
-
   const { users, loadingUsers } = getAllUsers();
 
   // Get today's date formatted as 'Sat, Aug 17'
@@ -74,24 +66,21 @@ function App() {
       <div className="text-center">
         <h2 className=" text-black">{today}</h2> {/* Display today's date */}
         <h1 className="text-black">Today's Visitors</h1>
-        <div className="search-box">Search all visitorss
+        <div className="search-box">Search all visitors
         </div>
-        {loading ? (
+        {loadingUsers ? (
           <div className="spinner"></div>
-        ) : Array.isArray(data) ? (
+        ) : Array.isArray(users) ? (
           <ul>
-            {data.map((item, index) => (
-              <li key={index}>{item}</li> // Adjust based on data structure
+            {users.map((user, index) => (
+              <li key={index}>{user.name}</li> // Adjust based on data structure
             ))}
           </ul>
         ) : (
-          <p>{JSON.stringify(data)}</p> // Display data in case it's an object or non-array
+          <p>{JSON.stringify(users)}</p> // Display data in case it's an object or non-array
         )}
-        <p className="text-black">
-          Get All Users: {!loadingUsers ? JSON.stringify(users) : "Users still loading"}
-        </p>
       </div>
-      <ScrollableComponent />
+      {!loadingUsers && <ScrollableComponent users={users} />}
       <div className="mt-4">
         <VoiceWidget />
       </div>

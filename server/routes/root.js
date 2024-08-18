@@ -14,6 +14,6 @@ module.exports = async function (fastify, opts) {
   fastify.get("/user", userController.getAllUsers);
   fastify.get("/user/:id", userController.getUserById);
   fastify.post("/user", userController.createUser);
-  fastify.put("/user/:id", userController.updateUser);
+  fastify.put("/user/:id", userController.checkInUser);
   fastify.delete("/user/:id", userController.deleteUser);
 }
