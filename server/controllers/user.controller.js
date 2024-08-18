@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 
 async function getAllUsers(request, reply) {
   try {
-    const res = await User.find();
+    const res = await User.find().sort({ lastVisited: -1 });
     const users = res;
     reply.send(users);
   } catch (error) {
