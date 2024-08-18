@@ -26,9 +26,6 @@ const Profile = () => {
         <div className="grid grid-cols-3 pt-4">
           <p className="text-gray-500">Last Visited</p>
           <p className="col-span-2">{lastVisited}</p>
-
-          <p>Notes</p>
-          <p>{notes}</p>
         </div>
       </div>
     </div>

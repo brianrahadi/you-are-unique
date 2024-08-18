@@ -71,7 +71,7 @@ const ScrollableComponent = ({
       <div style={styles.scrollContainer}>
         {isAllVisitors && (
           <div style={styles.row}>
-            <span className="text-gray-600 text-base">Name</span>
+            <span className="text-gray-600 text-base ml-3">Name</span>
             <span className="text-gray-600 text-base">Last visited</span>
           </div>
         )}
