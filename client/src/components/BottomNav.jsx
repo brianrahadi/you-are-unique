@@ -12,7 +12,7 @@ const BottomNav = () => {
           All
         </Link>
         <Link
-          to="/dashboard"
+          to="/"
           className="inline-block w-32 text-center text-black active:bg-slate-50 leading-10"
         >
           Today
