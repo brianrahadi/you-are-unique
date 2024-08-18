@@ -9,18 +9,6 @@ const Dashboard = ({ users, loadingUsers }) => {
     day: "numeric",
   });
 
-  const getFormattedTime = (dateStr) => new Date(dateStr).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
-
-  const usersWithLastVisitedTime = Array.isArray(users) ? users.map(u => {
-    return {
-      ...u, 
-      lastVisited: getFormattedTime(u.lastVisited)
-    }
-  }) : []
   return (
     <div className="App text-xl flex flex-col items-center mx-auto">
       <div className="text-center">
@@ -40,7 +28,7 @@ const Dashboard = ({ users, loadingUsers }) => {
         )} */}
       </div>
 
-      <ScrollableComponent users={usersWithLastVisitedTime} loadingUsers={loadingUsers}/>
+      <ScrollableComponent users={users} loadingUsers={loadingUsers}/>
     </div>
   );
 };

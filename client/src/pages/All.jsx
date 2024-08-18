@@ -1,21 +1,7 @@
 import React from "react";
-import useFetchData from "../hooks/use-fetch-data";
-import postData from "../hooks/post-data";
 import ScrollableComponent from "../components/ScrollableComponent";
 
 const All = ({ users, loadingUsers }) => {
-  const getFormattedShortDate = (dateStr) => new Date(dateStr).toLocaleDateString('en-us', {
-    month: "short",
-    day: "numeric"
-  });
-
-  const usersWithLastVisitedTime = Array.isArray(users) ? users.map(u => {
-    return {
-      ...u,
-      lastVisited: getFormattedShortDate(u.lastVisited)
-    }
-  }) : [];
-
   return (
     <div className="App text-xl flex flex-col items-center mx-auto">
       <div className="text-center">
@@ -34,7 +20,7 @@ const All = ({ users, loadingUsers }) => {
         )} */}
       </div>
 
-      <ScrollableComponent users={usersWithLastVisitedTime} loadingUsers={loadingUsers} />
+      <ScrollableComponent users={users} loadingUsers={loadingUsers} />
     </div>
   );
 };
