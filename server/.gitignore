@@ -1,3 +1,6 @@
+# Don't include .wav files
+*.wav
+
 # Logs
 logs
 *.log

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import MicRecorder from "mic-recorder-to-mp3";
+import axios from "axios";
 
 export const VoiceWidget = () => {
   const [state, setState] = useState({
@@ -7,6 +8,7 @@ export const VoiceWidget = () => {
     blobURL: "",
     isBlocked: false,
   });
+  const [formData, setFormData] = useState();
 
   const [Mp3Recorder, setMp3Recorder] = useState(
     new MicRecorder({ bitRate: 128 })
@@ -38,15 +40,40 @@ export const VoiceWidget = () => {
     }
   };
 
-  const stop = () => {
+  const stop = async () => {
     Mp3Recorder.stop()
       .getMp3()
-      .then(([buffer, blob]) => {
-        const blobURL = URL.createObjectURL(blob);
+      .then(async ([buffer, blob]) => {
+        // Create a FormData object
+        const blobData = new Blob(buffer, { type: "audio/ogg; codecs=opus" });
+        const blobURL = URL.createObjectURL(blobData);
         setState({ blobURL, isRecording: false });
-      })
-      .catch((e) => console.log(e));
+
+        const formData = new FormData();
+        formData.append("recording", blobData, "please.wav");
+        setFormData(formData);
+      });
   };
+
+  useEffect(() => {
+    const fetchData = async (data) => {
+      console.log(data);
+      try {
+        await axios.post("http://localhost:3000/record", data, {
+          headers: {
+            "Content-type": "multipart/form-data",
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (formData) {
+      fetchData(formData);
+      // const { success } = postData(formData);
+    }
+  }, [formData]);
 
   return (
     <div>
@@ -60,97 +87,3 @@ export const VoiceWidget = () => {
     </div>
   );
 };
-
-// import MicRecorder from "mic-recorder-to-mp3";
-// import { useEffect } from "react";
-// import { useState } from "react";
-
-// export const VoiceWidget = () => {
-//   const [isRecording, setIsRecording] = useState(false);
-//   const [canRecord, setCanRecord] = useState(false);
-//   const [MP3Recorder, setMP3Recorder] = useState(
-//     new MicRecorder({ bitRate: 128 })
-//   );
-
-//   useEffect(() => {
-//     navigator.getUserMedia(
-//       { audio: true },
-//       () => {
-//         console.log("Permission Granted");
-//         setCanRecord(true);
-//         // this.setState({ isBlocked: false });
-//       },
-//       () => {
-//         console.log("Permission Denied");
-//         setCanRecord(false);
-//       }
-//     );
-//   });
-
-//   const onClickStartRecording = () => {
-//     MP3Recorder.start()
-//       .then(() => {
-//         console.log("RECORDING");
-//         // button.textContent = "Stop recording";
-//         // button.classList.toggle("btn-danger");
-//         // button.removeEventListener("click", startRecording);
-//         // button.addEventListener("click", stopRecording);
-//       })
-//       .catch((e) => {
-//         console.error(e);
-//       });
-//   };
-
-//   const onClickStopRecording = () => {
-//     MP3Recorder.stop()
-//       .getMp3()
-//       .then(([buffer, blob]) => {
-//         console.log(buffer, blob);
-//         setIsRecording(false);
-//         const file = new File(buffer, "music.mp3", {
-//           type: blob.type,
-//           lastModified: Date.now(),
-//         });
-
-//         // const li = document.createElement("li");
-//         // const player = new Audio(URL.createObjectURL(file));
-//         // player.controls = true;
-//         // li.appendChild(player);
-//         // document.querySelector("#playlist").appendChild(li);
-
-//         // button.textContent = "Start recording";
-//         // button.classList.toggle("btn-danger");
-//         // button.removeEventListener("click", stopRecording);
-//         // button.addEventListener("click", startRecording);
-//       })
-//       .catch((e) => {
-//         console.error(e);
-//       });
-//   };
-
-//   return (
-//     <article>
-//       <button
-//         onClick={isRecording ? onClickStartRecording : onClickStopRecording}
-//         style={{ backgroundColor: isRecording ? "red" : "green" }}
-//       >
-//         {isRecording ? "Stop" : "Start"}
-//       </button>
-//       <p>
-//         {canRecord
-//           ? "You have permission to record"
-//           : "You don't have permission to record"}
-//       </p>
-//     </article>
-//   );
-// };
-
-// // const button = document.querySelector("button");
-
-// // button.addEventListener("click", startRecording);
-
-// // function startRecording() {}
-
-// // function stopRecording() {
-
-// // }

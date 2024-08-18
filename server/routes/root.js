@@ -16,4 +16,11 @@ module.exports = async function (fastify, opts) {
   fastify.post("/user", userController.createUser);
   fastify.put("/user/:id", userController.checkInUser);
   fastify.delete("/user/:id", userController.deleteUser);
+
+  fastify.post("/record", async function (request, reply) {
+    const data = await request.file();
+    await pump(data.file, fs.createWriteStream(data.filename));
+
+    return { status: 200 };
+  });
 }

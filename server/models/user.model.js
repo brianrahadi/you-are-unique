@@ -13,7 +13,8 @@ const UserSchema = new mongoose.Schema({
   timesVisited: {
     type: Number,
     required: true
-  }
+  },
+  funFact
 });
 
 const User = mongoose.model("User", UserSchema);
