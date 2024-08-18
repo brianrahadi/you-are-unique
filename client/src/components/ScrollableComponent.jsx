@@ -18,7 +18,7 @@ const styles = {
   item: {
     padding: "10px",
     borderBottom: "1px solid #ddd",
-    cursor: "pointer",
+    // cursor: "pointer",
   },
   row: {
     display: "flex",
@@ -53,15 +53,15 @@ const ScrollableComponent = ({ users, loadingUsers }) => {
             <div
               key={index}
               style={styles.item}
-              onClick={() =>
-                navigate("/profile", {
-                  state: {
-                    name: user.name,
-                    lastVisited: user.lastVisited,
-                    notes: user.notes,
-                  },
-                })
-              }
+              // onClick={() =>
+              //   navigate("/profile", {
+              //     state: {
+              //       name: user.name,
+              //       lastVisited: user.lastVisited,
+              //       notes: user.notes,
+              //     },
+              //   })
+              // }
             >
               <div style={styles.row}>
                 <span>{user.name}</span>
