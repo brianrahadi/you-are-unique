@@ -9,13 +9,24 @@ import MicRecorder from "mic-recorder-to-mp3";
 import iconMic from "../assets/icon_mic.svg";
 import iconAudio from "../assets/icon_audio.svg";
 import { useNavigate } from "react-router-dom";
+import useCreateUser from "../hooks/create-user";
 
 const Modal = (props) => {
-  const { open, setOpen, namePassed } = props;
+  const { open, setOpen, namePassed, allUsersName } = props;
   const [name, setName] = useState(namePassed);
+  const [submitted, setSubmitted] = useState(false);
+  const { success, loading, error, createUser } = useCreateUser();
   // const [open, setOpen] = useState(true);
-
+  
   const navigate = useNavigate();
+  const handleSubmitName = async (e) => {
+    e.preventDefault();
+    await createUser(name);
+    if (success) {
+      setOpen(false);
+      navigate('/'); // Navigate to home or another page
+    }
+  };
 
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -46,7 +57,7 @@ const Modal = (props) => {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full bg-white rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -62,12 +73,9 @@ const Modal = (props) => {
               <button
                 type="button"
                 data-autofocus
-                onClick={() => {
-                  // send the data to DB here?
-                  setOpen(false);
-                  navigate("/");
-                }}
-                className="mt-3 inline-flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-500 sm:mt-0 sm:w-auto"
+                disabled={name === ''}
+                onClick={handleSubmitName}
+                className="mt-3 inline-flex justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300  sm:mt-0 sm:w-auto"
               >
                 Confirm
               </button>
@@ -79,7 +87,7 @@ const Modal = (props) => {
   );
 };
 
-const RecordButton = () => {
+const RecordButton = ({ allUsersName }) => {
   const [state, setState] = useState({
     isRecording: false,
     blobURL: "",
@@ -151,7 +159,8 @@ const RecordButton = () => {
       <Modal
         open={isModalOpen}
         setOpen={setIsModalOpen}
-        namePassed="name name name"
+        allUsersName={allUsersName}
+        namePassed="name"
       ></Modal>
     </>
   );
