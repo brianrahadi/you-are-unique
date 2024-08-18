@@ -4,9 +4,8 @@ import { VoiceWidget } from "./components/VoiceWidget";
 import useFetchData from "./hooks/use-fetch-data";
 import postData from "./hooks/post-data";
 import BottomNav from "./components/BottomNav";
+import RecordButton from "./components/RecordButton";
 import Router from "./Router";
-import iconMic from "./assets/icon_mic.svg";
-import iconAudio from "./assets/icon_audio.svg";
 
 function App() {
   const { data, loading } = useFetchData();
@@ -25,9 +24,7 @@ function App() {
       </div>
 
       <BottomNav></BottomNav>
-      <button className="bg-red-600 rounded-full fixed bottom-4 right-4">
-        <img src={iconMic} alt="mic"></img>
-      </button>
+      <RecordButton></RecordButton>
     </BrowserRouter>
   );
 }

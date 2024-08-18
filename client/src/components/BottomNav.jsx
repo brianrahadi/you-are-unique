@@ -7,13 +7,13 @@ const BottomNav = () => {
       <ul className="h-full">
         <Link
           to="/all"
-          className="inline-block w-32 text-center text-black hover:bg-slate-50 leading-10"
+          className="inline-block w-32 text-center text-black active:bg-slate-50 leading-10"
         >
           All
         </Link>
         <Link
           to="/dashboard"
-          className="inline-block w-32 text-center text-black hover:bg-slate-50 leading-10"
+          className="inline-block w-32 text-center text-black active:bg-slate-50 leading-10"
         >
           Today
         </Link>
