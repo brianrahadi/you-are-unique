@@ -16,8 +16,12 @@ body {
 
 /* Keyframes for spinning animation */
 @keyframes spin {
-  0% { transform: rotate(0deg); } /* Start state */
-  100% { transform: rotate(360deg); } /* End state */
+  0% {
+    transform: rotate(0deg);
+  } /* Start state */
+  100% {
+    transform: rotate(360deg);
+  } /* End state */
 }
 
 /* Styling for the search box */
@@ -25,6 +29,7 @@ body {
   display: inline-block;
   padding: 10px;
   border: 1px solid #ccc;
+  color: rgb(112, 112, 112);
   border-radius: 12px; /* Rounded corners */
   width: 250px; /* Width of the text box */
   text-align: center; /* Center text inside the box */
