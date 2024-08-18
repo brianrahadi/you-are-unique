@@ -32,7 +32,7 @@ const RecordingModal = (props) => {
 };
 
 const Modal = (props) => {
-  const { open, setOpen, namePassed, allUsersName } = props;
+  const { open, setOpen, namePassed, refreshUsers } = props;
   const [name, setName] = useState(namePassed);
   const [submitted, setSubmitted] = useState(false);
   const { success, loading, error, createUser } = useCreateUser();
@@ -43,6 +43,7 @@ const Modal = (props) => {
     e.preventDefault();
     await createUser(name);
     if (success) {
+      refreshUsers();
       setOpen(false);
       navigate("/"); // Navigate to home or another page
     }
@@ -107,7 +108,7 @@ const Modal = (props) => {
   );
 };
 
-const RecordButton = ({ allUsersName }) => {
+const RecordButton = ({ allUsersName, refreshUsers }) => {
   const [state, setState] = useState({
     isRecording: false,
     blobURL: "",
@@ -211,6 +212,7 @@ const RecordButton = ({ allUsersName }) => {
         setOpen={setIsModalOpen}
         allUsersName={allUsersName}
         namePassed="name"
+        refreshUsers={refreshUsers}
       ></Modal>
     </>
   );

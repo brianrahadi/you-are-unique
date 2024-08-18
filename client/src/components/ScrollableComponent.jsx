@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getFormattedShortDate, getFormattedTime } from "../utils/date";
+import { getFormattedShortDate } from "../utils/date";
 import "../App.css"; // Import the CSS file with the spinner styles
 import { useNavigate } from "react-router-dom";
 
