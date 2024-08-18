@@ -11,6 +11,25 @@ import iconAudio from "../assets/icon_audio.svg";
 import { useNavigate } from "react-router-dom";
 import useCreateUser from "../hooks/create-user";
 
+const RecordingModal = (props) => {
+  const { open, stop } = props;
+
+  return (
+    <Dialog open={open} onClose={() => {}} className="relative z-10">
+      <DialogBackdrop
+        transition
+        className="fixed inset-0 bg-gray-500 bg-opacity-100 transition-opacity data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in"
+      />
+      <button
+        className={`rounded-full h-24 w-24 bg-green-600 outline-8 outline-green-300 outline fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}
+        onClick={stop}
+      >
+        <img src={iconAudio} alt="record"></img>
+      </button>
+    </Dialog>
+  );
+};
+
 const Modal = (props) => {
   const { open, setOpen, namePassed, allUsersName } = props;
   const [name, setName] = useState(namePassed);
@@ -105,11 +124,11 @@ const RecordButton = ({ allUsersName }) => {
       { audio: true },
       () => {
         console.log("Permission Granted");
-        setState({ isBlocked: false });
+        setState((prevState) => ({ ...prevState, isBlocked: false }));
       },
       () => {
         console.log("Permission Denied");
-        setState({ isBlocked: true });
+        setState((prevState) => ({ ...prevState, isBlocked: true }));
       }
     );
   }, []);
@@ -120,7 +139,7 @@ const RecordButton = ({ allUsersName }) => {
     } else {
       Mp3Recorder.start()
         .then(() => {
-          setState({ isRecording: true });
+          setState((prevState) => ({ ...prevState, isRecording: true }));
         })
         .catch((e) => console.error(e));
     }
@@ -131,7 +150,11 @@ const RecordButton = ({ allUsersName }) => {
       .getMp3()
       .then(([buffer, blob]) => {
         const blobURL = URL.createObjectURL(blob);
-        setState({ blobURL, isRecording: false });
+        setState((prevState) => ({
+          ...prevState,
+          blobURL,
+          isRecording: false,
+        }));
         // send the audio to backend here
         // if it's a new user, open the modal
         setIsModalOpen(true);
@@ -145,15 +168,13 @@ const RecordButton = ({ allUsersName }) => {
       {/* <audio src={state.blobURL} controls="controls" /> */}
 
       <button
-        className={`rounded-full fixed bottom-4 right-4 h-24 w-24 ${
-          state.isRecording
-            ? "bg-green-600 outline-8 outline-green-300 outline"
-            : "bg-red-600"
-        }`}
-        onClick={state.isRecording ? stop : start}
+        className={`rounded-full fixed bottom-4 right-4 h-24 w-24 bg-red-600`}
+        onClick={start}
       >
-        <img src={state.isRecording ? iconAudio : iconMic} alt="record"></img>
+        <img src={iconMic} alt="record"></img>
       </button>
+
+      <RecordingModal open={state.isRecording} stop={stop} />
 
       {/* {isModalOpen && <Modal></Modal>} */}
       <Modal
