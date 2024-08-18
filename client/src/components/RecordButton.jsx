@@ -12,6 +12,7 @@ import iconAudio from "../assets/icon_audio.svg";
 import { useNavigate } from "react-router-dom";
 import useCreateUser from "../hooks/create-user";
 import axios from "axios";
+import { getFormattedShortDate, getFormattedTime } from "../utils/date";
 
 const RecordingModal = (props) => {
   const { open, stop } = props;
@@ -35,7 +36,7 @@ const RecordingModal = (props) => {
 const Modal = (props) => {
   const { open, setOpen, namePassed, refreshUsers, users } = props;
   const [name, setName] = useState(() => namePassed);
-  const [isExistingUser, setIsExistingUser] = useState(false);
+  const [existingUser, setExistingUser] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const { success, loading, error, createUser } = useCreateUser();
   // const [open, setOpen] = useState(true);
@@ -53,8 +54,8 @@ const Modal = (props) => {
 
   useEffect(() => {
     if (Array.isArray(users) && name !== "") {
-      setIsExistingUser(
-        users.some(
+      setExistingUser(
+        users.find(
           (user) => user.name.trim().toLowerCase() === name.trim().toLowerCase()
         )
       );
@@ -99,9 +100,9 @@ const Modal = (props) => {
                 </div>
                 <Description className="text-base font-semibold leading-6 text-gray-500 text-center mt-3">
                   {name !== "" &&
-                    (isExistingUser
-                      ? `Checking in ${name} as it is an existing user. `
-                      : `Creating ${name} as it is a new user`)}
+                    (existingUser
+                      ? `Checking in ${name} as it is an existing user. ${name}'s last visit is ${getFormattedShortDate(existingUser.lastVisited)}, ${getFormattedTime(existingUser.lastVisited)}`
+                      : `Creating ${name} as it is a new user.`)}
                 </Description>
               </div>
             </div>
