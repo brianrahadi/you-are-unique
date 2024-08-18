@@ -25,7 +25,7 @@ const Profile = () => {
 
         <div className="grid grid-cols-3 pt-4">
           <p className="text-gray-500">Last Visited</p>
-          <p className="col-span-2">{lastVisited}</p>
+          <p className="text-gray-500 col-span-2">{lastVisited}</p>
         </div>
       </div>
     </div>
