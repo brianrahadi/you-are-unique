@@ -7,7 +7,7 @@ const Profile = () => {
     name = "",
     lastVisited = "",
     timesVisited = 1,
-    notes = "",
+    notes = [],
   } = location.state || {};
 
   return (
@@ -27,8 +27,8 @@ const Profile = () => {
           <p className="text-gray-500">Last Visited</p>
           <p className="col-span-2">{lastVisited}</p>
 
-          {/* <p>Notes</p>
-          <p>{notes}</p> */}
+          <p>Notes</p>
+          <p>{notes}</p>
         </div>
       </div>
     </div>
