@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import useFetchData from "../hooks/use-fetch-data";
 import postData from "../hooks/post-data";
@@ -9,6 +10,12 @@ const Dashboard = () => {
 
   const [name, setName] = useState("");
 
+=======
+import React from "react";
+import ScrollableComponent from "../components/ScrollableComponent";
+
+const Dashboard = ({ users, loadingUsers, isAllVisitors }) => {
+>>>>>>> b13e9ac733947cf39e1f34a5bbdfb9b22f09e7b0
   // Get today's date formatted as 'Sat, Aug 17'
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "short",
@@ -20,6 +27,7 @@ const Dashboard = () => {
     <div className="App text-xl flex flex-col items-center mx-auto">
       <div className="text-center mb-4">
         <h2 className=" text-black">{today}</h2> {/* Display today's date */}
+<<<<<<< HEAD
         <h1 className="text-black">Today's Visitors</h1>
         <input
           id="price"
@@ -42,9 +50,13 @@ const Dashboard = () => {
         ) : (
           <p>{JSON.stringify(data)}</p> // Display data in case it's an object or non-array
         )} */}
+=======
+        <h1 className="text-black">{isAllVisitors ? 'All Visitors' : 'Today\'s Visitors'}</h1>
+        <div className="search-box">Search all visitors</div>
+>>>>>>> b13e9ac733947cf39e1f34a5bbdfb9b22f09e7b0
       </div>
 
-      <ScrollableComponent />
+      <ScrollableComponent users={users} loadingUsers={loadingUsers}/>
     </div>
   );
 };
