@@ -42,13 +42,13 @@ function App() {
             <p>{JSON.stringify(data)}</p> // Display data in case it's an object or non-array
           )}
         </div>
-        <ScrollableComponent />
+        <ScrollableComponent /> */}
 
-        <div className="mt-4">
-          <VoiceWidget />
-          <p>Post Data: {success ? 1 : 0}</p>
-        </div>
-      </div> */}
+      <div className="mt-4">
+        <VoiceWidget />
+        <p>Post Data: {success ? 1 : 0}</p>
+      </div>
+      {/* </div> */}
 
       <BottomNav></BottomNav>
       <RecordButton></RecordButton>
