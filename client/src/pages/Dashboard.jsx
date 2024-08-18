@@ -1,12 +1,7 @@
 import React from "react";
-import useFetchData from "../hooks/use-fetch-data";
-import postData from "../hooks/post-data";
 import ScrollableComponent from "../components/ScrollableComponent";
 
-const Dashboard = () => {
-  const { data, loading } = useFetchData();
-  const { success } = postData("wow123");
-
+const Dashboard = ({ users, loadingUsers }) => {
   // Get today's date formatted as 'Sat, Aug 17'
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "short",
@@ -14,6 +9,18 @@ const Dashboard = () => {
     day: "numeric",
   });
 
+  const getFormattedTime = (dateStr) => new Date(dateStr).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  const usersWithLastVisitedTime = Array.isArray(users) ? users.map(u => {
+    return {
+      ...u, 
+      lastVisited: getFormattedTime(u.lastVisited)
+    }
+  }) : []
   return (
     <div className="App text-xl flex flex-col items-center mx-auto">
       <div className="text-center">
@@ -33,7 +40,7 @@ const Dashboard = () => {
         )} */}
       </div>
 
-      <ScrollableComponent />
+      <ScrollableComponent users={usersWithLastVisitedTime} loadingUsers={loadingUsers}/>
     </div>
   );
 };

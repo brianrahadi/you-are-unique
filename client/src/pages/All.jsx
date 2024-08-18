@@ -3,9 +3,18 @@ import useFetchData from "../hooks/use-fetch-data";
 import postData from "../hooks/post-data";
 import ScrollableComponent from "../components/ScrollableComponent";
 
-const All = () => {
-  const { data, loading } = useFetchData();
-  const { success } = postData("wow123");
+const All = ({ users, loadingUsers }) => {
+  const getFormattedShortDate = (dateStr) => new Date(dateStr).toLocaleDateString('en-us', {
+    month: "short",
+    day: "numeric"
+  });
+
+  const usersWithLastVisitedTime = Array.isArray(users) ? users.map(u => {
+    return {
+      ...u,
+      lastVisited: getFormattedShortDate(u.lastVisited)
+    }
+  }) : [];
 
   return (
     <div className="App text-xl flex flex-col items-center mx-auto">
@@ -25,7 +34,7 @@ const All = () => {
         )} */}
       </div>
 
-      <ScrollableComponent />
+      <ScrollableComponent users={usersWithLastVisitedTime} loadingUsers={loadingUsers} />
     </div>
   );
 };

@@ -14,7 +14,9 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  funFact
+  notes: {
+    type: [String]
+  }
 });
 
 const User = mongoose.model("User", UserSchema);
