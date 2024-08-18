@@ -1,7 +1,7 @@
 import React from "react";
 import ScrollableComponent from "../components/ScrollableComponent";
 
-const Dashboard = ({ users, loadingUsers, isAllVisitors }) => {
+const Dashboard = ({ users, loadingUsers, isAllVisitors, allUsers }) => {
   // Get today's date formatted as 'Sat, Aug 17'
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "short",
@@ -19,7 +19,11 @@ const Dashboard = ({ users, loadingUsers, isAllVisitors }) => {
         </h1>
       </div>
 
-      <ScrollableComponent users={users} loadingUsers={loadingUsers} />
+      <ScrollableComponent
+        users={users}
+        loadingUsers={loadingUsers}
+        allUsers={allUsers}
+      />
     </div>
   );
 };
