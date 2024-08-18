@@ -20,7 +20,7 @@ const Dashboard = () => {
         <h2 className=" text-black">{today}</h2> {/* Display today's date */}
         <h1 className="text-black">Today's Visitors</h1>
         <div className="search-box">Search all visitors</div>
-        {loading ? (
+        {/* {loading ? (
           <div className="spinner"></div>
         ) : Array.isArray(data) ? (
           <ul>
@@ -30,8 +30,9 @@ const Dashboard = () => {
           </ul>
         ) : (
           <p>{JSON.stringify(data)}</p> // Display data in case it's an object or non-array
-        )}
+        )} */}
       </div>
+
       <ScrollableComponent />
     </div>
   );
