@@ -47,7 +47,6 @@ const ScrollableComponent = ({ users, loadingUsers, allUsers, isAllVisitors, ref
     if (success) {
       setName("");
       refreshUsers();
-      setOpen(false);
       navigate("/"); // Navigate to home or another page
     }
   };
