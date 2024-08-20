@@ -7,12 +7,10 @@ Technologies Used:
 •	Voice Recognition Algorithm: Matches voice recordings to user profiles.
 
 Features:
-
 •	Check-In/Check-Out Process: Voice-based user identification for seamless profile management.
 •	Data Management: Stores and tracks user data securely.
 
 Next Steps:
-
 •	Validate voice recording acceptance and refine the recognition algorithm.
 •	Explore broader solutions for identification challenges, particularly for those without traditional IDs.
 •	Incorporating LLM to enhance user interaction and provide additional functionalities
